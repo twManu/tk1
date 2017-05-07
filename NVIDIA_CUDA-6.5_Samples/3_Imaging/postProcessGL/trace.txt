@@ -1,0 +1,73 @@
+
+# see if X supported by examing the return of XOpenDisplay
+bool IsOpenGLAvailable(const char *appName)
+
+bool initGL(int *argc, char **argv)
+	+ check IsOpenGLAvailable
+	+ init glut, display mode, window size, and create a window
+	+ init OpenGL extension
+	+ gray the window? glClearColor(0.5, 0.5, 0.5, 1.0)
+    + disable GL_DEPTH_TEST
+	+ set viewport as the window
+    // projection
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(60.0, (GLfloat)window_width / (GLfloat) window_height, 0.1f, 10.0f);
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+    glEnable(GL_LIGHT0);
+    float red[] = { 1.0f, 0.1f, 0.1f, 1.0f };
+    float white[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, red);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, white);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 60.0f);
+
+    SDK_CHECK_ERROR_GL();
+
+    return true;
+}
+
+
+
+main
+	- check if parameter "-file=<reference> -radius=<n>" provided
+		+ ref_file if provided
+		+ blur_radius if provided
+		+* runStdProgram(argc, argv)
+		
+runStdProgram(argc, argv)
+	+ initGL(&argc, argv)
+    + initCUDA(argc, argv, true)
+	+ create and reset sdk timer
+	+ register GLUT callbacks for display, keyboard, reshape, and timer
+	+ create GLUT menu and right button
+	+ initGLBuffers();
+#ifndef USE_TEXSUBIMAGE2D
+    initCUDABuffers();
+#endif
+
+    // Creating the Auto-Validation Code
+    if (ref_file)
+    {
+        g_CheckRender = new CheckBackBuffer(window_width, window_height, 4);
+        g_CheckRender->setPixelFormat(GL_RGBA);
+        g_CheckRender->setExecPath(argv[0]);
+        g_CheckRender->EnableQAReadback(true);
+    }
+
+    printf("\n"
+           "\tControls\n"
+           "\t(right click mouse button for Menu)\n"
+           "\t[ ] : Toggle CUDA Post Processing (on/off)\n"
+           "\t[a] : Toggle Animation (on/off)\n"
+           "\t[=] : Increase Blur Radius\n"
+           "\t[-] : Decrease Blur Radius\n"
+           "\t[esc] - Quit\n\n"
+          );
+
+    // start rendering mainloop
+    glutMainLoop();
+
+    // Normally unused return path
+    Cleanup(EXIT_SUCCESS);

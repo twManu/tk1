@@ -1,0 +1,225 @@
+<!doctype html>
+<html class="csstransforms csstransforms3d csstransitions" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+	
+	<title>NVIDIA GameWorks OpenGL Samples Setup Guide</title>
+	<meta name="description" content="NVIDIA GameWorks OpenGL Samples Setup Guide" />
+
+	<!-- CSS files -->
+    <link href="./css/application.css" rel="stylesheet" type="text/css" />
+    <link href="./css/styleguide.css" rel="stylesheet" type="text/css" />
+	<!--<link rel="stylesheet" type="text/css" href="sdk_samples.css" />-->
+	<!-- scripts to include -->
+    <script src="./js/jquery.js"></script>
+    <script src="./js/owl.carousel.js"></script>
+    <script src="./js/jquery.fitvids.js"></script>
+    <script src="./js/jquery.colorbox.js"></script>
+    <script src="./js/jquery.isotope.js"></script>
+    <script src="./js/jquery.sidr.js"></script>
+    <script src="./js/bootstrap.js"></script>
+    <script src="./js/application.js"></script>
+    <script src="./js/prettify.js"></script>
+</head>
+
+<body style="">
+
+<!--Navbar-->
+<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+  <div class="container">
+	<div class="navbar-header" style="">
+	  <!--<button class="navbar-toggle" type="button"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>-->
+	  <div class="logo-header">
+		<a class="navbar-brand logo" href="http://developer.nvidia.com/gameworks"><img alt="NVidia Gameworks" height="21" src="./images/developerzone_gameworks_logo.png" width="245"></a>
+	  </div>
+	</div>
+  </div>
+</nav>
+
+<!-- main body block -->
+<div id="content" class="container">
+
+<div class="row">
+ <div class="col-md-8">
+	<div class="page-header">
+		<h1>NVIDIA GameWorks OpenGL Samples Setup Guide</h1>
+	</div>
+	<p class="lead">This guide will help you with the setup of your host machine in order to properly build and run the the NVIDIA GameWorks OpenGL sample applications.</p>
+	<p>Please ensure your system meets the <a href="gl_prereq.htm">OpenGL Samples Prerequisites</a> before proceeding further.</p>
+	
+	<h2>Installing and Building on Windows Host</h2>
+	<p>This section will walk you through the setup of the OpenGL samples on a Windows development PC, for Android and Windows build targets.</p>
+
+	<h3>Targeting Windows Host</h3>
+	<ol>
+		<li>Unzip the samples pack to a directory on the Windows Host PC.  We will call this directory <code>SAMPLES_ROOT</code>.</li>
+		<li>Launch Visual Studio 2010 or 2012.</li>
+		<li>Open the all-samples project file: <code>{SAMPLES_ROOT}/samples/build/vs201[0,2]win32/AllSamples.sln</code>.</li>
+		<li>Build the solution as release or debug.</li>
+		<li>The resulting apps will be placed in <code>{SAMPLES_ROOT}/samples/bin/vs201[0,2]x86/</code>.</li>
+	</ol>
+	<h3>Targeting Android Device</h3>
+	<ol>
+		<li>Unzip the samples pack to a directory on the Windows Host PC.  We will call this directory <code>SAMPLES_ROOT</code>.</li>
+		<li>If you haven't already, download and install the <a href="http://developer.nvidia.com/tadp">Tegra Android Development Pack</a> (TADP) for Windows.  Be sure to include NVIDIA Nsight Tegra, Visual Studio Edition as an installed component.</li>
+		<li>Launch Visual Studio 2010 or 2012.</li>
+		<li>Open the all-samples project file: <code>{SAMPLES_ROOT}/samples/build/vs2010android/AllSamples.sln</code> (only VS2010 project files are included for Android, but they will open with warnings in VS2012).</li>
+		<li>Build the solution as release or debug.</li>
+		<li>The resulting app APKs will be placed in <code>{SAMPLES_ROOT}/samples/bin/Tegra-Android/</code>.</li>
+	</ol>
+	<h5>Common Android Build Errors</h5>
+	<ul>
+		<li><p>An error similar to:</p>
+			<div class="alert alert-warning"><code class="small">
+			BUILD FAILED<br/>C:\NVPACK\android-sdk-windows\tools\ant\build.xml:542: Unable to resolve project target 'android-14'
+			</code></div>
+			<p>Can be solved as follows:</p>
+			<ol>
+				<li>Run <code>{NVPACK}/android-sdk-windows/SDKManager.exe</code></li>
+				<li>Click <b>deselect all</b>.</li>
+				<li>Find <b>Android 4.0 (API14)</b>.</li>
+				<li>Check <b>SDK Platform</b>.</li>
+				<li>Click <b>Install packages</b>.</li>
+				<li>Follow the steps to accept the license and install the package</li>
+			</ol>
+		</li>
+		<li><p>The error:</p>
+			<div class="alert alert-warning"><code class="small">
+			[dx] Could not create the Java virtual machine.<br/>
+			[dx] Error occurred during initialization of VM<br/>
+			[dx] Could not reserve enough space for object heap
+			</code></div>
+			<p>Can be fixed as follows:</p>
+			<ol>
+				<li>Edit <code>{NVPACK}\android-sdk-windows\build-tools\{each version}\dx.bat</code>.</li>
+				<li>Find the line:<br/><code>set defaultMx=-Xmx1024M</code><br/>And change the 1024 to 512, like:<br/><code>set defaultMx=-Xmx512M</code>.</li>
+				<li>Save and exit.</li>
+				<li>Restart Visual Studio.</li>
+				<li>Rebuild.</li>
+			</ol>
+		</li>
+	</ul>
+
+	<h2>Installing and Building on Linux Host</h2>
+	<p>This section will walk you through the setup of the OpenGL samples on a Linux development PC for Linux and Android build targets.</p>
+	
+	<h3>Targeting Linux x86</h3>
+	<ol>
+		<li>Install the Linux build/target pre-requisites by running:<br/>
+			<code>sudo apt-get install g++ binutils-gold xorg-dev libglu1-mesa-dev</code>
+		</li>
+		<li>Unzip the samples pack to a directory on the Linux Host PC.  We will call this directory <code>SAMPLES_ROOT</code>.</li>
+		<li>Open a terminal window to <code>{SAMPLES_ROOT}/samples/build/linux[32,64]</code>, depending on the host PC.</li>
+		<li>Run <code>make</code>.</li>
+		<li>The resulting apps will be placed in <code>{SAMPLES_ROOT}/samples/bin/linux[32,64]/</code>.  Note that as per the <a href="gl_prereq.htm">Prerequisites</a> guide, the system must have working OpenGL drivers for the samples to run.</li>
+	</ol>
+
+   <h5>Common Linux x86 Build Errors</h5>
+   <ul>
+     <li>
+       <p>
+         An error similar to:</p>
+         <div class="alert alert-warning">
+           <code class="small">
+             ./../../../extensions/externals/lib/linux64/libglfw3.a(x11_gamma.c.o): In function `_glfwInitGammaRamp':<br/>
+             x11_gamma.c:(.text+0x49): undefined reference to `XRRGetScreenResources'<br/>
+           </code>
+         </div>
+         <p>Can be caused by the use of the BFD linker instead of GOLD.  Can be solved as follows:</p>
+         <ol>
+           <li>
+             <code class="small">cd /usr/bin</code>
+           </li>
+           <li>
+             <code class="small">sudo apt-get install binutils-gold</code>
+           </li>
+           <li>
+             <code class="small">sudo rm ld</code>
+           </li>
+           <li>
+             <code class="small">sudo ln -s ld.gold ld</code>
+           </li>
+         </ol>
+     </li>
+   </ul>
+
+   <h3>Targeting Linux Tegra (L4T, e.g. Jetson TK1)</h3>
+   <p>It is possible to build for Tegra Linux target (e.g. Jetson TK1) either cross-compiled from a Linux x86 host or directly compiled on the Linux for Tegra device itself.</p>
+   <h5>Cross-compiling from x86 Linux Host</h5>
+   <ol>
+     <li>Unzip the samples pack to a directory on the Linux Host PC.  We will call this directory <code>SAMPLES_ROOT</code>.</li>
+     <li>Install the Linux target pre-requisites:<br/>
+       <code>sudo apt-get install g++-arm-linux-gnueabihf</code>
+     </li>
+     <li>Open a terminal window to <code>{SAMPLES_ROOT}/samples/build/linux-arm32</code>, depending on the host PC.</li>
+     <li>run <code>make</code></li>
+     <li>The resulting apps will be placed in <code>{SAMPLES_ROOT}/samples/bin/linux-arm32/</code></li>
+   </ol>
+   <h5>Compiling on the Tegra Linux Device</h5>
+   <ol>
+     <li>Unzip the samples pack to a directory on the Linux Host PC.  We will call this directory <code>SAMPLES_ROOT</code>.</li>
+     <li>Install the Linux target pre-requisites:<br/>
+       <code>sudo apt-get update</code>(this is critical, or else the next line will do nothing)<br/>
+       <code>sudo apt-get install g++</code>
+     </li>
+     <li>Open a terminal window to <code>{SAMPLES_ROOT}/samples/build/linux-arm32</code>, depending on the host PC.</li>
+     <li>Run <code>make</code>.</li>
+     <li>The resulting apps will be placed in <code>{SAMPLES_ROOT}/samples/bin/linux-arm32/</code></li>
+   </ol>
+
+   <h3>Targeting Android Device</h3>
+	<ol>
+		<li>Unzip the samples pack to a directory on the Linux Host PC.  We will call this directory <code>SAMPLES_ROOT</code>.</li>
+		<li>If you haven't already, download and install the <a href="http://developer.nvidia.com/tadp">Tegra Android Development Pack</a> (TADP) for Linux.</li>
+		<li>Set the environment variable <code>NVPACK_ROOT</code> for all terminals to the root of the TADP install (i.e. the full path to <code>NVPACK</code>)</li>
+		<li>Set the environment variable <code>ANDROID_HOME</code> for all terminals to the root android SDK (likely the full path to <code>NVPACK/android-sdk-linux</code>)</li>
+		<li>If the NDK version installed by TADP is not the default for the release (currently <code>android-ndk-r9d</code>), set the environment variable <code>NVPACK_NDK_VERSION</code> for all terminals to the NDK version, e.g. <code>android-ndk-r9d</code>.  Note that the makefiles require the NDK to be inside of the <code>NVPACK_ROOT</code>, since they were designed to support the Tegra Android Development Pack for consistency.</li>
+		<li>Install the Linux pre-requisites:<br/>
+			<code>sudo apt-get install openjdk-6-jdk dos2unix</code>
+		</li>
+		<li>If you are on a 64-bit Linux host, install the 32-bit pre-requisites:<br/><code>sudo apt-get install ia32-libs</code></li>
+		<li>Open a terminal window to <code>{SAMPLES_ROOT}/samples/build/makeandroid</code>.</li>
+		<li>Run <code>make</code>
+		<li>The resulting app APKs will be placed in <code>{SAMPLES_ROOT}/samples/{sample name}/bin/</code></li>
+	</ol>
+	<h5>Common Android Build Errors</h5>
+	<ul>
+		<li><p>The error:</p>
+			<div class="alert alert-warning"><code class="small">
+			The environment must define NVPACK_ROOT
+			</code></div>
+			indicates that the current shell's environment does not declare the required <code>NVPACK_ROOT</code>.  Please check that it is properly exported.
+		</li>
+		<li><p>The error:</p>
+			<div class="alert alert-warning"><code class="small">
+			sdk.dir is missing. Make sure to generate local.properties using 'android update project' or inject it through the ANDROID_HOME environment variable.
+			</code></div>
+			indicates that the current shell's environment does not declare the required <code>ANDROID_HOME</code>.  Please ensure that it is properly exported in your shell.
+		</li>
+		<li><p>The error:</p>
+			<div class="alert alert-warning"><code class="small">
+			make: NVPACK/android-ndk-r9b/toolchains/arm-linux-androideabi-4.8/prebuilt/linux-x86_64/bin/arm-linux-androideabi-g++: Command not found
+			</code></div>
+			indicates that the NDK version in <code>NVPACK</code> is not the one used by default with the release makefile (currently NDK r9b).  This can be fixed by setting the environment variable <code>NVPACK_NDK_VERSION</code> to the NDK version, e.g. <code>android-ndk-r9d</code>.  Please ensure that it is properly exported in your shell.  Note that the makefiles require the NDK to be inside of <code>NVPACK</code>, since they were designed to support the Tegra Android Development Pack for consistency.
+		</li>
+	</ul>
+ </div> <!--col-md-8-->
+ <div class="col-md-4"></div>
+</div> <!--row-->
+
+</div> <!--content-->
+<!-- footer block-->
+<div id="footer" class="container">
+	<div class="seperator"></div>
+	<div class="seperator"></div>
+	<footer>
+		<div class="row">
+			<div class="text-center">&copy;2014 NVIDIA Corporation.</div>
+			<div class="seperator"></div>
+		</div>
+	</footer>
+</div> <!--footer-->
+
+</body>
+</html>
